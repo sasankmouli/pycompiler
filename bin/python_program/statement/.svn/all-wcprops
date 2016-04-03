@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/72/trunk/Python_Interpreter/src/python_program/statement
+END
+PassStatement.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/65/trunk/Python_Interpreter/src/python_program/statement/PassStatement.java
+END
+IfElseStatement.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/70/trunk/Python_Interpreter/src/python_program/statement/IfElseStatement.java
+END
+WhileStatement.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/72/trunk/Python_Interpreter/src/python_program/statement/WhileStatement.java
+END
+TargetAssignStatement.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/69/trunk/Python_Interpreter/src/python_program/statement/TargetAssignStatement.java
+END
+PrintStatement.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/71/trunk/Python_Interpreter/src/python_program/statement/PrintStatement.java
+END
+IfStatement.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/71/trunk/Python_Interpreter/src/python_program/statement/IfStatement.java
+END
+FunctionDefinitionStatement.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/70/trunk/Python_Interpreter/src/python_program/statement/FunctionDefinitionStatement.java
+END
+ReturnStatement.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/69/trunk/Python_Interpreter/src/python_program/statement/ReturnStatement.java
+END
+ExpressionStatement.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/63/trunk/Python_Interpreter/src/python_program/statement/ExpressionStatement.java
+END
+Statement.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/69/trunk/Python_Interpreter/src/python_program/statement/Statement.java
+END
+AssignStatement.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/66/trunk/Python_Interpreter/src/python_program/statement/AssignStatement.java
+END

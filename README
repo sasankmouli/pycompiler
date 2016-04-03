@@ -1,0 +1,2 @@
+Compile using: make
+Run using: bin/parser test/test1.py

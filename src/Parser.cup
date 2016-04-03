@@ -1,0 +1,450 @@
+package parser;
+
+
+import java.util.*;
+import parser.LekserLex;
+import java_cup.runtime.*;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.*;
+
+
+import python_program.*;
+import python_program.expression.*;
+import python_program.operators.*;
+import python_program.statement.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Collections;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import javax.xml.transform.*;
+import javax.xml.transform.stream.*;
+parser code {:
+  Vector<String> output;
+
+  public static void main(String[] args) throws Exception {
+  
+      Writer output = new BufferedWriter(new FileWriter(args[0],true));  //clears file every time
+      output.append(System.lineSeparator());
+      output.close();
+  
+      String PathOut = Paths.get(args[0]).getFileName().toString();
+      PathOut = PathOut.substring(0, PathOut.lastIndexOf('.')) + ".html";
+
+  
+      // create a buffering scanner wrapper
+      ScannerBuffer lexer = new ScannerBuffer(new LekserLex(new BufferedReader(new FileReader(args[0]))));
+      
+      // start parsing
+      parser p = new parser(lexer);
+      p.output = new Vector<String>();
+      XMLElement e = (XMLElement)p.debug_parse().value;
+      
+      Collections.reverse(p.output);
+      File file = new File(PathOut);
+      boolean b = file.createNewFile();
+      FileWriter writer = new FileWriter(file); 
+      writer.write("<html>\n<head>\n<style>\ntable,td {\n\tborder: 1px solid black;\n\tborder-collapse: collapse;\n}\ntd {\n\ttext-align: left;\n}\n</style>\n</head>\n<body>\n<table>");
+      for (String s : p.output) {
+        writer.write("\t<tr>\n" + s + "\t</tr>\n");
+      }
+      writer.write("</table>\n</body>\n</html>\n");
+      writer.flush();
+      writer.close();
+    
+      String content = new java.util.Scanner(new File(args[0])).useDelimiter("\\Z").next();
+      output = new BufferedWriter(new FileWriter(args[0]));
+      output.append(content.substring(0, content.length()));
+      output.close();
+    
+  }
+:};
+
+
+terminal        FALSE,
+                TRUE,
+                __IMPORT__,
+                __NAME__,
+                ABS,
+                AND,
+                APPLY,
+                AS,
+                ASSERT,
+                ASSIGN,
+                BOOL,
+                BREAK,
+                BUFFER,
+                CALLABLE,
+                CHR,
+                CLASS,
+                CLASSMETHOD,
+                CMP,
+                COERCE,
+                COLON,
+                COMMA,
+                COMPILE,
+                COMPLEX,
+                CONTINUE,
+                DEDENT,
+                DEF,
+                DEL,
+                DELATTR,
+                DICT,
+                DIR,
+                DIV,
+                DIVMOD,
+                ELIF,
+                ELLIPSIS,
+                ELSE,
+                ENUMERATE,
+                EQUAL,
+                ERROR,
+                EVAL,
+                EXCEPT,
+                EXEC,
+                EXECFILE,
+                FILE,
+                FILTER,
+                FINALLY,
+                FLOAT,
+                FOR,
+                FROM,
+                FROZENSET,
+                FULLSTOP,
+                GETATTR,
+                GLOBAL,
+                GLOBALS,
+                GREATER,
+                GREATEROREQUAL,
+                HASATTR,
+                HASH,
+                HELP,
+                HEX,
+                ID,
+                IDENTIFIER,
+                IF,
+                IMPORT,
+                IN,
+                INDENT,
+                INPUT,
+                INT,
+                INTEGER,
+                INTERN,
+                IS,
+                ISINSTANCE,
+                ISSUBCLASS,
+                ITER,
+                LAMBDA,
+                LEFTCURLYBRACKET,
+                LEFTPARENTHESE,
+                LEFTSQUAREBRACKET,
+                LEN,
+                LESS,
+                LESSOREQUAL,
+                LIST,
+                LOCALS,
+                LONG,
+                MAP,
+                MAX,
+                MIN,
+                MINUS,
+                MOD,
+                MULT,
+                MULTILINESTRING,
+                NAME,
+                NEWLINE,
+                NONE,
+                NOT,
+                NOTEQUAL,
+                NOTIMPLEMENTED,
+                OBJECT,
+                OCT,
+                OP_ARITH_EXP,
+                OP_ARITH_FLDIV,
+                OP_BIT_LSHIFT,
+                OP_BIT_RSHIFT,
+                OP_BIT_AND,
+                OP_BIT_OR,
+                OP_BIT_XOR,
+                OP_BIT_NOT,
+                OP_COMP_NOTEQ,
+                OP_MISC,
+                OP_INLINE_ARITH_PLUS,
+                OP_INLINE_ARITH_MINUS,
+                OP_INLINE_ARITH_MULT,
+                OP_INLINE_ARITH_DIV,
+                OP_INLINE_ARITH_FLDIV,
+                OP_INLINE_ARITH_MODULO,
+                OP_INLINE_BIT_AND,
+                OP_INLINE_BIT_OR,
+                OP_INLINE_BIT_RSHIFT,
+                OP_INLINE_BIT_LSHIFT,
+                OP_INLINE_ARITH_EXP,
+                OPEN,
+                OR,
+                ORD,
+                PASS,
+                PLUS,
+                POW,
+                PRINT,
+                PROPERTY,
+                RAISE,
+                RANGE,
+                RAW_INPUT,
+                REDUCE,
+                RELOAD,
+                REPR,
+                RETURN,
+                REVERSED,
+                RIGHTCURLYBRACKET,
+                RIGHTPARENTHESE,
+                RIGHTSQUAREBRACKET,
+                ROUND,
+                SELF,
+                SEMICOLON,
+                SET,
+                SETATTR,
+                SLICE,
+                SORTED,
+                STATICMETHOD,
+                STR,
+                STRING,
+                SUM,
+                SUPER,
+                TRY,
+                TUPLE,
+                UMINUS,
+                UNICHR,
+                UNICODE,
+                VARS,
+                WHILE,
+                WITH,
+                XRANGE,
+                YIELD,
+                ZIP;
+
+
+non terminal    program,
+                stmt_newline_list,
+                stmt_newline,
+                stmt,
+                simple_stmt,
+                compund_stmt,
+                small_stmt_list,
+                small_stmt,
+                semi_question,
+                expr_stmt,
+                expr_stmt_comma_list,
+                strings,
+                string_exp,
+                string_exp_comma_list,
+                identifier_comma_list,
+                suite,
+                stmt_newline_star,
+                newline_star
+                ;
+                
+                
+/* Precedences */
+precedence left IF, ELSE;
+precedence left ASSIGN;
+precedence left OR;
+precedence left AND;
+precedence left NOT;
+precedence left LESS, GREATER, LESSOREQUAL, GREATEROREQUAL, EQUAL, NOTEQUAL, IS;
+precedence left PLUS, MINUS;
+precedence left MULT, DIV, MOD;
+precedence left UMINUS;
+precedence left POW;
+precedence left LEFTSQUAREBRACKET, RIGHTSQUAREBRACKET, LEFTCURLYBRACKET, RIGHTCURLYBRACKET, LEFTPARENTHESE, RIGHTPARENTHESE;
+
+program                     ::= stmt_newline_list:val {: RESULT = new Program((List<Statement>)val); :}
+                                ;
+
+stmt_newline_list           ::= stmt_newline:val1 stmt_newline_list:val2 {: ((List<Statement>)val1).addAll((List<Statement>)val2);
+                                    RESULT = val1; :}
+                                |
+                                /* epsilon */ {: RESULT = new LinkedList<Statement>(); :}
+                                ;
+
+stmt_newline                ::= stmt:val {: RESULT = val; :}
+                                |
+                                NEWLINE {:  :}
+                                ;
+
+stmt                        ::= simple_stmt:val {: RESULT = val; :}
+                                |
+                                compund_stmt:val {: RESULT = val; :}
+                                ;
+
+                                
+semi_question               ::= SEMICOLON {:  :}
+                                |
+                                /* epsilon */ {:  :}
+                                ;
+                                
+simple_stmt                 ::= small_stmt_list:val semi_question NEWLINE {: RESULT = val; :}
+                                ;
+
+small_stmt_list             ::= small_stmt_list:val1 SEMICOLON small_stmt:val2 {: ((List<Statement>)val1).addAll((List<Statement>)val2);
+                                    RESULT = val1; :}
+                                |
+                                small_stmt:val {: RESULT = val; :}
+                                ;
+                                
+small_stmt                  ::= expr_stmt_comma_list:val {: RESULT = val; :}
+                                |
+                                string_exp_comma_list:val {: RESULT = val; :}
+                                |
+                                PRINT expr_stmt_comma_list:val {: RESULT = new PrintStatement((List<Expression>)val); :}
+                                |
+                                PRINT string_exp_comma_list:val {: RESULT = new PrintStatement((List<Expression>)val); :}
+                                |
+                                DEL expr_stmt_comma_list:val {:  :}
+                                |
+                                PASS {: RESULT = new PassStatement(); :}
+                                |
+                                BREAK {: :}
+                                |
+                                CONTINUE {:  :}
+                                |
+                                RETURN expr_stmt:val {: RESULT = new ReturnStatement((Expression)val); :}
+                                |
+                                GLOBAL IDENTIFIER:val2 identifier_comma_list:val3 {:  :}
+                                ;
+
+expr_stmt                   ::= INTEGER:val {: RESULT = new IntegerExpression((String)val); :}
+                                |
+                                MINUS expr_stmt:val {: RESULT = new UnaryExpression(UnaryOperators.sub, (Expression) val); :}
+                                |
+                                PLUS expr_stmt:val {: RESULT = new UnaryExpression(UnaryOperators.add, (Expression) val); :}
+                                %prec UMINUS
+                                |
+                                NOT expr_stmt:val {: RESULT = new UnaryExpression(UnaryOperators.not, (Expression) val); :}                                
+                                %prec NOT
+                                |
+                                expr_stmt:val1 PLUS expr_stmt:val2 {: RESULT = new BinaryExpression((Expression) val1, BinaryOperators.add, (Expression) val2); :}
+                                |
+                                expr_stmt:val1 MINUS expr_stmt:val2 {: RESULT = new BinaryExpression((Expression) val1, BinaryOperators.sub, (Expression) val2); :}
+                                |
+                                expr_stmt:val1 MULT expr_stmt:val2 {: RESULT = new BinaryExpression((Expression) val1, BinaryOperators.mult, (Expression) val2); :}
+                                |
+                                expr_stmt:val1 DIV expr_stmt:val2 {: RESULT = new BinaryExpression((Expression) val1, BinaryOperators.div, (Expression) val2); :}
+                                |
+                                expr_stmt:val1 MOD expr_stmt:val2 {: RESULT = new BinaryExpression((Expression) val1, BinaryOperators.mod, (Expression) val2); :}
+                                |
+                                expr_stmt:val1 POW expr_stmt:val2 {: RESULT = new BinaryExpression((Expression) val1, BinaryOperators.pow, (Expression) val2); :}
+                                |
+                                expr_stmt:val1 LESS expr_stmt:val2 {: RESULT = new BinaryExpression((Expression) val1, BinaryOperators.less, (Expression) val2); :}
+                                |
+                                expr_stmt:val1 GREATER expr_stmt:val2 {: RESULT = new BinaryExpression((Expression) val1, BinaryOperators.greater, (Expression) val2); :}
+                                |
+                                expr_stmt:val1 EQUAL expr_stmt:val2 {: RESULT = new BinaryExpression((Expression) val1, BinaryOperators.equal, (Expression) val2); :}
+                                |
+                                expr_stmt:val1 GREATEROREQUAL expr_stmt:val2 {: RESULT = new BinaryExpression((Expression) val1, BinaryOperators.greaterorequal, (Expression) val2); :}
+                                |
+                                expr_stmt:val1 LESSOREQUAL expr_stmt:val2 {: RESULT = new BinaryExpression((Expression) val1, BinaryOperators.lessorequal, (Expression) val2); :}
+                                |
+                                expr_stmt:val1 NOTEQUAL expr_stmt:val2 {: RESULT = new BinaryExpression((Expression) val1, BinaryOperators.notequal, (Expression) val2); :}
+                                |
+                                expr_stmt:val1 OR expr_stmt:val2 {: RESULT = new BinaryExpression((Expression) val1, BinaryOperators.or, (Expression) val2); :}
+                                |
+                                expr_stmt:val1 AND expr_stmt:val2 {: RESULT = new BinaryExpression((Expression) val1, BinaryOperators.and, (Expression) val2); :}
+                                |
+                                IDENTIFIER:val1 ASSIGN expr_stmt:val2 {: RESULT = new AssignStatement(new IdentifierExpression((String)val1), (Expression)val2); :}
+                                |
+                                LEFTPARENTHESE expr_stmt:val RIGHTPARENTHESE {: RESULT = new ParenthesesExpression((Expression)val); :}
+                                |
+                                INPUT LEFTPARENTHESE RIGHTPARENTHESE {: RESULT = new InputExpression(); :}
+                                |
+                                FLOAT:val {: RESULT = new FloatExpression(((String)val)); :}
+                                |
+                                TRUE {: RESULT = new TrueExpression(); :}
+                                |
+                                FALSE {: RESULT = new FalseExpression(); :}
+                                |
+                                IDENTIFIER:val {: RESULT = new IdentifierExpression((String)val); :}
+                                |
+                                LEFTSQUAREBRACKET expr_stmt_comma_list:val RIGHTSQUAREBRACKET {: RESULT = new ListExpression((List<Expression>)val); :}
+                                |
+                                expr_stmt LEFTPARENTHESE RIGHTPARENTHESE {: RESULT = new FunctionExpression((Expression)expr, new LinkedList<Expression>()); :}
+                                |
+                                expr_stmt:val1 LEFTPARENTHESE expr_stmt_comma_list:val2 RIGHTPARENTHESE  {: RESULT = new FunctionExpression((Expression)val1, (LinkedList<Expression>)val2); :}
+                                ;
+
+expr_stmt_comma_list        ::= expr_stmt_comma_list:val1 COMMA expr_stmt:val2 {: ((List<Expression>)val1).add((Expression)val2); 
+                                        RESULT = val1; :}
+                                |
+                                expr_stmt:val {: List<Expression> list = new LinkedList<Expression>();
+                                        if((Expression)val != null) {
+                                            list.add((Expression)val);
+                                        }
+                                        RESULT = list; :}
+                                ;
+
+strings                     ::= STRING:value {: RESULT = (String)value ; :}
+                                |
+                                MULTILINESTRING:value {: RESULT = (String)value; :}
+                                ;
+
+
+string_exp                  ::= strings:value {: RESULT = new StringExpression((String)value); :}
+                                |
+                                string_exp PLUS string_exp {:  :}
+                                |
+                                string_exp PLUS IDENTIFIER:value {:  :}
+                                |
+                                IDENTIFIER:value PLUS string_exp {:  :}
+                                |
+                                IDENTIFIER:val1 ASSIGN string_exp:val2 {: RESULT = new AssignStatement(new IdentifierExpression((String)val1), (StringExpression)val2); :}
+                                |
+                                LEFTPARENTHESE string_exp:val RIGHTPARENTHESE {: RESULT = val; :}
+                                ;
+
+string_exp_comma_list       ::= string_exp_comma_list:val1 COMMA string_exp:val2 {: ((List<Expression>)val1).add((Expression)val2); 
+                                        RESULT = val1; :}
+                                |
+                                string_exp:val {: List<Expression> list = new LinkedList<Expression>();
+                                        if((Expression)val != null) {
+                                            list.add((Expression)val);
+                                        }
+                                        RESULT = list; :}
+                                ;
+
+compund_stmt                ::= IF expr_stmt:val1 COLON suite:val2 ELSE COLON suite:val3 {: RESULT = new IfElseStatement((Expression)val1, (List<Statement>)val2, (List<Statement>)val3); :}
+                                |
+                                IF expr_stmt:val1 COLON suite:val2 {: RESULT = new IfStatement((Expression)val1, (List<Statement>)val2); :}
+                                |
+                                WHILE expr_stmt:val1 COLON suite:val2 {: RESULT = new WhileStatement((Expression)val1, (List<Statement>)val2); :}
+                                |
+                                DEF IDENTIFIER:val1 LEFTPARENTHESE RIGHTPARENTHESE COLON suite:val2 {: interpreter.FunctionsVariables.function.add((String) val1);
+                                        RESULT = new FunctionDefinitionStatement((String)val1, new LinkedList<String>(), (List<Statement>)val2); :}
+                                |
+                                DEF IDENTIFIER:val1 LEFTPARENTHESE IDENTIFIER:val2 identifier_comma_list:val3 RIGHTPARENTHESE COLON suite:val4 {: interpreter.FunctionsVariables.function.add((String) val1);
+                                        ((List<String>)val3).add((String)val2);
+                                        RESULT = new FunctionDefinitionStatement((String)val1, (List<String>)val3, (List<Statement>)val4); :}
+                                ;
+
+identifier_comma_list       ::= COMMA IDENTIFIER:val1 identifier_comma_list:val2 {: ((List<String>)val2).add((String)val1);
+                                        RESULT = val2; :}
+                                |
+                                /*epsilon*/ {: RESULT = new LinkedList<String>(); :}
+                                ;                           
+
+suite                       ::= simple_stmt:val {: RESULT = (List<Statement>)val; :}
+                                |
+                                NEWLINE INDENT newline_star stmt:val stmt_newline_star DEDENT {: RESULT = (List<Statement>)val; :}
+                                ;
+                                
+stmt_newline_star           ::= stmt_newline:val stmt_newline_star {: RESULT = val; :}
+                                |
+                                /* epsilon */ {:  :}
+                                ;
+                                
+newline_star                ::= NEWLINE newline_star {:  :}
+                                |
+                                /* epsilon */ {:  :}
+                                ;

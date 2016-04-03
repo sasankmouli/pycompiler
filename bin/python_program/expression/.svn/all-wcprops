@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/71/trunk/Python_Interpreter/src/python_program/expression
+END
+LambdaExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/71/trunk/Python_Interpreter/src/python_program/expression/LambdaExpression.java
+END
+ParenthesesExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/71/trunk/Python_Interpreter/src/python_program/expression/ParenthesesExpression.java
+END
+IdentifierExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/71/trunk/Python_Interpreter/src/python_program/expression/IdentifierExpression.java
+END
+SubscriptionExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/71/trunk/Python_Interpreter/src/python_program/expression/SubscriptionExpression.java
+END
+BinaryExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/70/trunk/Python_Interpreter/src/python_program/expression/BinaryExpression.java
+END
+FunctionExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/71/trunk/Python_Interpreter/src/python_program/expression/FunctionExpression.java
+END
+FloatExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/71/trunk/Python_Interpreter/src/python_program/expression/FloatExpression.java
+END
+FalseExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/71/trunk/Python_Interpreter/src/python_program/expression/FalseExpression.java
+END
+ListExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/71/trunk/Python_Interpreter/src/python_program/expression/ListExpression.java
+END
+IntegerExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/71/trunk/Python_Interpreter/src/python_program/expression/IntegerExpression.java
+END
+UnaryExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/56/trunk/Python_Interpreter/src/python_program/expression/UnaryExpression.java
+END
+InputExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/63/trunk/Python_Interpreter/src/python_program/expression/InputExpression.java
+END
+TrueExpression.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/71/trunk/Python_Interpreter/src/python_program/expression/TrueExpression.java
+END
+Expression.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/71/trunk/Python_Interpreter/src/python_program/expression/Expression.java
+END
